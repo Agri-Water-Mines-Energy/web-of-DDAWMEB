@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>login </title>
       <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    </head>
       <style type="text/css">
 
         * {
@@ -126,33 +128,116 @@ body {
 }
 
 
-
-
-
       </style>
+      
+      
 
 
 
-        <body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <body>
 
            <div class="login-container">
         <h2>Welcome Back</h2>
-        <form>
-            <div class="input-group">
-                <label for="username">Username or Email</label>
-                <input type="text" id="username" placeholder="Enter your username" required>
-            </div>
-            
-            <div class="input-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Enter your password" required>
-            </div>
+        <!-- Inside your login.html form -->
+<form id="login-form" onsubmit="handleLogin(event)">
+    <input type="email" id="email" placeholder="Enter email" required class="border p-2 rounded mb-3 w-full">
+    <input type="password" id="password" placeholder="Enter password" required class="border p-2 rounded mb-4 w-full">
+    <button type="submit" class="bg-indigo-600 text-white p-2 rounded w-full">Login</button>
+</form>
 
-            <div class="options">
-                <label><input type="checkbox"> Remember me</label>
-                <a href="#">Forgot password?</a>
-            </div>
+<script>
+async function handleLogin(event) {
+    event.preventDefault(); // Stop page from refreshing
 
-            <button type="submit" class="login-btn">Log In</button>
-        </form>
-    </div>
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    try {
+        // Send credentials to your backend authentication route
+        const response = await fetch("https://api.yourdomain.com/api/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            // 1. Save the token and email locally so the portal knows the user is logged in
+            localStorage.setItem("authToken", data.token);
+            localStorage.setItem("userEmail", email);
+
+            // 2. Redirect directly to your tender portal page
+            window.location.href = "tender-portal.html";
+        } else {
+            alert(data.error || "Login failed. Please check your credentials.");
+        }
+    } catch (error) {
+        console.error("Login error:", error);
+        alert("An error occurred connecting to the server.");
+    }
+}
+async function handleLogin(event) {
+    event.preventDefault();
+
+    // TEMPORARY: Skip backend server check and fake a successful login
+    localStorage.setItem("authToken", "mock-token-12345");
+    localStorage.setItem("userEmail", document.getElementById("email").value);
+    
+    // Jump straight to your portal page!
+    window.location.href = "tender-portal.html";
+}
+async function handleLogin(event) {
+    event.preventDefault();
+
+    const email = document.getElementById("email").value;
+
+    // Save a mock token directly to browser storage
+    localStorage.setItem("authToken", "local-test-token-12345");
+    localStorage.setItem("userEmail", email);
+
+    // Redirect straight to your portal page!
+    window.location.href = "tender-portal.html";
+}
+
+
+
+
+
+
+
+
+</script>
+      </div>
+    </body>
+</html>
